@@ -1,15 +1,19 @@
 const express = require('express')
-const string_square = require('./string_square.js')
+const bodyParser = require('body-parser')
 const app = express()
+const square = require('./str_squ')
 const PORT = process.env.PORT || 3000
 
-app.get('/', (req, res) => res.send('Hello World!'))
-app.get('/api/square', (req, res) => {
-	var string=req.query.string;
-	var square=string_square(string);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-	res.setHeader('Content-Type', 'application/json');
-    	res.send(JSON.stringify({ result: square}));
-	
+app.get('/', (req, res) => res.send('Hello World!'))
+
+app.get('/square', (req, res) => {
+    const sq = square.string_square(req.query.string);
+    const sq2 = square.string_square(req.query.string2);
+    res.json({result1: sq,result2: sq2})
 })
-app.listen(PORT);
+
+app.listen(PORT, () => console.log('Example app listening on port'+
+PORT))
